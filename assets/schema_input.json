@@ -13,21 +13,27 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "hifi_reads": {
                 "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "format": "directory-path",
+                "errorMessage": "HiFi reads directory path must be provided and cannot contain spaces"
             },
-            "fastq_2": {
+            "hic_reads": {
                 "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "format": "directory-path",
+                "errorMessage": "HiC reads directory path must be provided and cannot contain spaces"
+            },
+            "assembly": {
+                "type": "string",
+                "format": "directory-path",
+                "errorMessage": "Assembly directory path must be provided and cannot contain spaces"
+            },
+            "busco_genes": {
+                "type": "string",
+                "format": "directory-path",
+                "errorMessage": "BUSCO genes directory path must be provided and cannot contain spaces"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "hifi_reads", "hic_reads", "assembly", "busco_genes"]
     }
 }

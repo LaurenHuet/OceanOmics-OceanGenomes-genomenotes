@@ -10,7 +10,7 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": ["input", "outdir"],
+            "required": ["input", "outdir", "taxdump", "blastp", "blastn"],
             "properties": {
                 "input": {
                     "type": "string",
@@ -20,8 +20,29 @@
                     "mimetype": "text/csv",
                     "pattern": "^\\S+\\.csv$",
                     "description": "Path to comma-separated file containing information about the samples in the experiment.",
-                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row.",
+                    "help_text": "You will need to create a design file with information about the samples in your experiment before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 5 columns, and a header row.",
                     "fa_icon": "fas fa-file-csv"
+                },
+                "taxdump": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Path to the taxdump database directory.",
+                    "help_text": "Specify the path to the taxdump database directory that will be used for taxonomic classification.",
+                    "fa_icon": "fas fa-database"
+                },
+                "blastp": {
+                    "type": "string",
+                    "format": "directory-path", 
+                    "description": "Path to the Diamond BLASTP database directory.",
+                    "help_text": "Specify the path to the Diamond database directory that will be used for protein sequence alignment.",
+                    "fa_icon": "fas fa-database"
+                },
+                "blastn": {
+                    "type": "string",
+                    "format": "directory-path",
+                    "description": "Path to the BLASTN database directory.",
+                    "help_text": "Specify the path to the BLASTN database directory that will be used for nucleotide sequence alignment.",
+                    "fa_icon": "fas fa-database"
                 },
                 "outdir": {
                     "type": "string",
