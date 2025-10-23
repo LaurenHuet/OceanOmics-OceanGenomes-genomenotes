@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/LaurenHuet/oceanomics-oceangenomes-genomenotes/master/nextflow_schema.json",
-    "title": "LaurenHuet/oceanomics-oceangenomes-genomenotes pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/master/nextflow_schema.json",
+    "title": "LaurenHuet/OceanOmics-OceanGenomes-genomenotes pipeline parameters",
     "description": "This pipeline is for the generation of the Minderoo OceanOmics centre high quality reference genomenotes.",
     "type": "object",
     "$defs": {

@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.0.0 - [date]
 
-Initial release of LaurenHuet/oceanomics-oceangenomes-genomenotes, created with the [nf-core](https://nf-co.re/) template.
+Initial release of LaurenHuet/OceanOmics-OceanGenomes-genomenotes, created with the [nf-core](https://nf-co.re/) template.
 
 ### `Added`
 

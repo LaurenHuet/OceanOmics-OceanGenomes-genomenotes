@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    LaurenHuet/oceanomics-oceangenomes-genomenotes
+    LaurenHuet/OceanOmics-OceanGenomes-genomenotes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/LaurenHuet/oceanomics-oceangenomes-genomenotes
+    Github : https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes
 ----------------------------------------------------------------------------------------
 */
 

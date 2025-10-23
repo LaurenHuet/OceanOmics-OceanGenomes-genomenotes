@@ -1,8 +1,8 @@
-# LaurenHuet/oceanomics-oceangenomes-genomenotes
+# LaurenHuet/OceanOmics-OceanGenomes-genomenotes
 
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new/LaurenHuet/oceanomics-oceangenomes-genomenotes)
-[![GitHub Actions CI Status](https://github.com/LaurenHuet/oceanomics-oceangenomes-genomenotes/actions/workflows/nf-test.yml/badge.svg)](https://github.com/LaurenHuet/oceanomics-oceangenomes-genomenotes/actions/workflows/nf-test.yml)
-[![GitHub Actions Linting Status](https://github.com/LaurenHuet/oceanomics-oceangenomes-genomenotes/actions/workflows/linting.yml/badge.svg)](https://github.com/LaurenHuet/oceanomics-oceangenomes-genomenotes/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new/LaurenHuet/OceanOmics-OceanGenomes-genomenotes)
+[![GitHub Actions CI Status](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/nf-test.yml/badge.svg)](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/nf-test.yml)
+[![GitHub Actions Linting Status](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/linting.yml/badge.svg)](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
 [![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
@@ -10,11 +10,11 @@
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
-[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/LaurenHuet/oceanomics-oceangenomes-genomenotes)
+[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes)
 
 ## Introduction
 
-**LaurenHuet/oceanomics-oceangenomes-genomenotes** is a bioinformatics pipeline that ...
+**LaurenHuet/OceanOmics-OceanGenomes-genomenotes** is a bioinformatics pipeline that ...
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
@@ -52,7 +52,7 @@ Now, you can run the pipeline using:
 <!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
-nextflow run LaurenHuet/oceanomics-oceangenomes-genomenotes \
+nextflow run LaurenHuet/OceanOmics-OceanGenomes-genomenotes \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
@@ -63,7 +63,7 @@ nextflow run LaurenHuet/oceanomics-oceangenomes-genomenotes \
 
 ## Credits
 
-LaurenHuet/oceanomics-oceangenomes-genomenotes was originally written by LaurenHuet.
+LaurenHuet/OceanOmics-OceanGenomes-genomenotes was originally written by LaurenHuet.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
@@ -76,7 +76,7 @@ If you would like to contribute to this pipeline, please see the [contributing g
 ## Citations
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use LaurenHuet/oceanomics-oceangenomes-genomenotes for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+<!-- If you use LaurenHuet/OceanOmics-OceanGenomes-genomenotes for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 <!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 

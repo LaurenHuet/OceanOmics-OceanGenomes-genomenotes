@@ -1,6 +1,6 @@
 {
-    "name": "LaurenHuet/oceanomics-oceangenomes-genomenotes",
-    "homePage": "https://github.com/LaurenHuet/oceanomics-oceangenomes-genomenotes",
+    "name": "LaurenHuet/OceanOmics-OceanGenomes-genomenotes",
+    "homePage": "https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
