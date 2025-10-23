@@ -2,7 +2,8 @@
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new/LaurenHuet/OceanOmics-OceanGenomes-genomenotes)
 [![GitHub Actions CI Status](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/nf-test.yml/badge.svg)](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/nf-test.yml)
-[![GitHub Actions Linting Status](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/linting.yml/badge.svg)](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/linting.yml)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![GitHub Actions Linting Status](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/linting.yml/badge.svg)](https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes/actions/workflows/linting.yml)
+[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
 [![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
@@ -24,7 +25,10 @@
 
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+
+1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
@@ -55,6 +59,7 @@ You will also need to prepare the following databases:
 - **Taxdump database**: For taxonomic classification
 - **Diamond BLASTP database**: For protein sequence alignment
 - **BLASTN database**: For nucleotide sequence alignment
+
 Now, you can run the pipeline using:
 
 <!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
@@ -81,6 +86,7 @@ nextflow run LaurenHuet/OceanOmics-OceanGenomes-genomenotes \
 
 ### Example Usage
 
+```bash
 # Run with Singularity
 nextflow run LaurenHuet/OceanOmics-OceanGenomes-genomenotes \
    -profile singularity \
