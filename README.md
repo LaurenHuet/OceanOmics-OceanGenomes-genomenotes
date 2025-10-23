@@ -31,6 +31,33 @@
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
+<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
+     Explain what rows and columns represent. For instance (please edit as appropriate):
+
+First, prepare a samplesheet with your input data that looks as follows:
+
+`samplesheet.csv`:
+
+```csv
+sample,hifi_reads,hic_reads,assembly,busco_genes
+sample1,/path/to/hifi_reads_dir,/path/to/hic_reads_dir,/path/to/assembly_dir,/path/to/busco_genes_dir
+sample2,/path/to/hifi_reads_dir2,/path/to/hic_reads_dir2,/path/to/assembly_dir2,/path/to/busco_genes_dir2
+```
+
+Each row represents a sample with the following columns:
+- `sample`: Sample identifier (must be unique)
+- `hifi_reads`: Path to directory containing HiFi reads
+- `hic_reads`: Path to directory containing HiC reads  
+- `assembly`: Path to directory containing assembly files
+- `busco_genes`: Path to directory containing BUSCO genes
+
+You will also need to prepare the following databases:
+- **Taxdump database**: For taxonomic classification
+- **Diamond BLASTP database**: For protein sequence alignment
+- **BLASTN database**: For nucleotide sequence alignment
+Now, you can run the pipeline using:
+
+<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 Now, you can run the pipeline using:
 
