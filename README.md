@@ -31,31 +31,37 @@
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
-First, prepare a samplesheet with your input data that looks as follows:
-
-`samplesheet.csv`:
-
-```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-```
-
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
 
 Now, you can run the pipeline using:
-
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
 nextflow run LaurenHuet/OceanOmics-OceanGenomes-genomenotes \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
-   --outdir <OUTDIR>
+   --outdir <OUTDIR> \
+   --taxdump /path/to/taxdump/database \
+   --blastp /path/to/diamond/database \
+   --blastn /path/to/blastn/database
+```
+
+### Required Parameters
+
+- `--input`: Path to comma-separated file containing information about the samples
+- `--outdir`: The output directory where the results will be saved
+- `--taxdump`: Path to the taxdump database directory for taxonomic classification
+- `--blastp`: Path to the Diamond BLASTP database directory for protein sequence alignment
+- `--blastn`: Path to the BLASTN database directory for nucleotide sequence alignment
+
+### Example Usage
+
+# Run with Singularity
+nextflow run LaurenHuet/OceanOmics-OceanGenomes-genomenotes \
+   -profile singularity \
+   --input assets/samplesheet.csv \
+   --outdir results \
+   --taxdump /data/databases/taxdump \
+   --blastp /data/databases/diamond \
+   --blastn /data/databases/blastn
 ```
 
 > [!WARNING]
