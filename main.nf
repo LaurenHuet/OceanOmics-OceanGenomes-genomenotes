@@ -25,7 +25,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ocea
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES {
+workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES_PIPELINE {
 
     take:
     samplesheet // channel: samplesheet read in from --input

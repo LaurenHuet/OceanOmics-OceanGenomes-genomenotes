@@ -3,9 +3,12 @@
 module load nextflow/24.10.0
 
 export NXF_HOME=/scratch/pawsey0964/lhuet/.nextflow
+export NXF_SINGULARITY_CACHEDIR="/scratch/pawsey0964/lhuet/singularity/.nextflow_singularity"
 mkdir -p $NXF_HOME/plugins
+mkdir -p $NXF_SINGULARITY_CACHEDIR
 
 echo "Set NXF_HOME to: $NXF_HOME"
+echo "Set NXF_SINGULARITY_CACHEDIR to: $NXF_SINGULARITY_CACHEDIR"
 echo "Created plugins directory: $NXF_HOME/plugins"
 
 nextflow run main.nf \

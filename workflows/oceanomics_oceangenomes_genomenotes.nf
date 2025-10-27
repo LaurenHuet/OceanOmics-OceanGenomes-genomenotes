@@ -53,7 +53,7 @@ workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES {
     // View generated YAML files for debugging
     BLOBTOOLS.out.yaml_files.view { meta, yml_file ->
         "Generated YAML config for sample ${meta.id} (${meta.tolid}): ${yml_file}"
-
+    }
 
 
     //
