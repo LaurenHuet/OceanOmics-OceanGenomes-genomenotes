@@ -13,7 +13,7 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { OCEANOMICS-OCEANGENOMES-GENOMENOTES  } from './workflows/oceanomics-oceangenomes-genomenotes'
+include { OCEANOMICS_OCEANGENOMES_GENOMENOTES  } from './workflows/oceanomics_oceangenomes_genomenotes'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_oceanomics-oceangenomes-genomenotes_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_oceanomics-oceangenomes-genomenotes_pipeline'
 /*
@@ -25,7 +25,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_ocea
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow LAURENHUET_OCEANOMICS-OCEANGENOMES-GENOMENOTES {
+workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES {
 
     take:
     samplesheet // channel: samplesheet read in from --input
@@ -35,11 +35,11 @@ workflow LAURENHUET_OCEANOMICS-OCEANGENOMES-GENOMENOTES {
     //
     // WORKFLOW: Run pipeline
     //
-    OCEANOMICS-OCEANGENOMES-GENOMENOTES (
+    OCEANOMICS_OCEANGENOMES_GENOMENOTES (
         samplesheet
     )
     emit:
-    multiqc_report = OCEANOMICS-OCEANGENOMES-GENOMENOTES.out.multiqc_report // channel: /path/to/multiqc_report.html
+    multiqc_report = OCEANOMICS_OCEANGENOMES_GENOMENOTES.out.multiqc_report // channel: /path/to/multiqc_report.html
 }
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -68,7 +68,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    LAURENHUET_OCEANOMICS-OCEANGENOMES-GENOMENOTES (
+    OCEANOMICS_OCEANGENOMES_GENOMENOTES (
         PIPELINE_INITIALISATION.out.samplesheet
     )
     //
@@ -81,7 +81,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        LAURENHUET_OCEANOMICS-OCEANGENOMES-GENOMENOTES.out.multiqc_report
+        OCEANOMICS_OCEANGENOMES_GENOMENOTES.out.multiqc_report
     )
 }
 

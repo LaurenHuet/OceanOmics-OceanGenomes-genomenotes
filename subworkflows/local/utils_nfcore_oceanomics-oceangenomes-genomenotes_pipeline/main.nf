@@ -79,15 +79,13 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-        Channel
+    //
+    // Create channel from input file provided through params.input
+    //
+    Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map {
-            meta, hifi_reads, hic_reads, assembly, busco_genes, bioproject_id, version, date, tolid, taxid, species ->
-                return [ meta.id, meta, hifi_reads, hic_reads, assembly, busco_genes, bioproject_id, version, date, tolid, taxid, species ]
-        }
-        .groupTuple()
-        .map { samplesheet ->
-            validateInputSamplesheet(samplesheet)
+        .map { row ->
+            validateInputSamplesheet(row)
         }
         .set { ch_samplesheet }
     emit:
@@ -153,24 +151,30 @@ workflow PIPELINE_COMPLETION {
 // Validate channels from input samplesheet
 //
 def validateInputSamplesheet(input) {
-    def (metas, hifi_reads, hic_reads, assembly, busco_genes, bioproject_id, version, date, tolid, taxid, species) = input[1..11]
+    def (meta, hifi_dir, hic_dir, assembly, busco_genes, bioproject_id, version, date, tolid, taxid, species) = input
 
     // Basic validation - ensure all required paths are provided
-    if (!hifi_reads[0] || !hic_reads[0] || !assembly[0] || !busco_genes[0]) {
-        error("Please check input samplesheet -> All directory paths must be provided for sample: ${metas[0].id}")
+    if (!hifi_dir || !hic_dir || !assembly || !busco_genes) {
+        error("Please check input samplesheet -> All directory paths must be provided for sample: ${meta.id}")
     }
 
+    // Convert directory paths to path objects
+    def hifi_path = file(hifi_dir, checkIfExists: true)
+    def hic_path = file(hic_dir, checkIfExists: true)
+    def assembly_path = file(assembly, checkIfExists: true)
+    def busco_path = file(busco_genes, checkIfExists: true)
+
     // Add the additional metadata to the meta map
-    def enriched_meta = metas[0] + [
-        bioproject_id: bioproject_id[0],
-        version: version[0],
-        date: date[0],
-        tolid: tolid[0],
-        taxid: taxid[0],
-        species: species[0]
+    def enriched_meta = meta + [
+        bioproject_id: bioproject_id,
+        version: version,
+        date: date,
+        tolid: tolid,
+        taxid: taxid,
+        species: species
     ]
 
-    return [ enriched_meta, hifi_reads[0], hic_reads[0], assembly[0], busco_genes[0] ]
+    return [ enriched_meta, hifi_path, hic_path, assembly_path, busco_path ]
 }
 //
 // Generate methods description for MultiQC

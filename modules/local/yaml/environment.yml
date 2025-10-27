@@ -1,0 +1,7 @@
+name: yaml
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - bash=5.1
