@@ -13,12 +13,12 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "hifi_reads": {
+            "hifi_dir": {
                 "type": "string",
                 "format": "directory-path",
                 "errorMessage": "HiFi reads directory path must be provided and cannot contain spaces"
             },
-            "hic_reads": {
+            "hic_dir": {
                 "type": "string",
                 "format": "directory-path",
                 "errorMessage": "HiC reads directory path must be provided and cannot contain spaces"
@@ -32,8 +32,36 @@
                 "type": "string",
                 "format": "directory-path",
                 "errorMessage": "BUSCO genes directory path must be provided and cannot contain spaces"
+            },
+            "bioproject_id": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "bioproject_id must be provided without spaces (e.g. PRJNA123456)"
+            },
+            "version": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "version should be a short identifier with no spaces (e.g. hic1 or hic2)"
+            },
+            "date": {
+                "type": "string",
+                "pattern": "^v?\\d{6}$",
+                "errorMessage": "date should be in vYYMMDD or YYMMDD format (e.g. v230609 or 230609)"
+            },
+            "tolid": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "tolid must be provided and cannot contain spaces"
+            },
+            "taxid": {
+                "type": "integer",
+                "errorMessage": "taxid must be an integer NCBI taxon id"
+            },
+            "species": {
+                "type": "string",
+                "errorMessage": "species name must be provided"
             }
         },
-        "required": ["sample", "hifi_reads", "hic_reads", "assembly", "busco_genes"]
+        "required": ["sample", "hifi_dir", "hic_dir", "assembly", "busco_genes"]
     }
 }

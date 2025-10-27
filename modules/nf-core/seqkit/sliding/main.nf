@@ -8,7 +8,7 @@ process SEQKIT_SLIDING {
         'biocontainers/seqkit:2.9.0--h9ee0642_0' }"
 
     input:
-    tuple val(meta), path(fastx)
+    tuple val(meta), path(assembly)
 
     output:
     tuple val(meta), path("*.fast*"), emit: fastx
@@ -21,13 +21,13 @@ process SEQKIT_SLIDING {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def extension = "fastq"
-    if ("$fastx" ==~ /.+\.fasta$|.+\.fa$|.+\.fas$|.+\.fna$/) {
+    if ("$assembly" ==~ /.+\.fasta$|.+\.fa$|.+\.fas$|.+\.fna$/) {
         extension = "fasta"
     }
     """
     seqkit \\
         sliding \\
-        ${fastx} \\
+        ${assembly} \\
         ${args} \\
         --threads ${task.cpus} \\
         -o ${prefix}.${extension}
@@ -40,7 +40,7 @@ process SEQKIT_SLIDING {
 
     stub:
     prefix = task.ext.prefix ?: "${meta.id}"
-    if ("$fastx" ==~ /.+\.fasta$|.+\.fa$|.+\.fas$|.+\.fna$/) {
+    if ("$assembly" ==~ /.+\.fasta$|.+\.fa$|.+\.fas$|.+\.fna$/) {
         extension = "fasta"
     }
     """

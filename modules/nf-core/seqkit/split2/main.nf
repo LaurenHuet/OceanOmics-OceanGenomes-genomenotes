@@ -8,10 +8,10 @@ process SEQKIT_SPLIT2 {
         'biocontainers/seqkit:2.9.0--h9ee0642_0' }"
 
     input:
-    tuple val(meta), path(reads)
+    tuple val(meta), path(fastx)
 
     output:
-    tuple val(meta), path("${prefix}/*"), emit: reads
+    tuple val(meta), path("${prefix}/*"), emit: split_fastx
     path "versions.yml"             , emit: versions
 
     when:
@@ -26,7 +26,7 @@ process SEQKIT_SPLIT2 {
             split2 \\
             $args \\
             --threads $task.cpus \\
-            $reads \\
+            $fastx \\
             --out-dir ${prefix}
 
         cat <<-END_VERSIONS > versions.yml

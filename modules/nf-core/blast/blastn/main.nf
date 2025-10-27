@@ -8,7 +8,7 @@ process BLAST_BLASTN {
         'community.wave.seqera.io/library/blast:2.17.0--d4fb881691596759' }"
 
     input:
-    tuple val(meta) , path(fasta)
+    tuple val(meta) , path(split_fastx)
     tuple val(meta2), path(db)
     path taxidlist
     val taxids
