@@ -79,18 +79,17 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-    Channel
+        Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .map {
-            meta, hifi_reads, hic_reads, assembly, busco_genes ->
-                return [ meta.id, meta, hifi_reads, hic_reads, assembly, busco_genes ]
+            meta, hifi_reads, hic_reads, assembly, busco_genes, bioproject_id, version, date, tolid, taxid, species ->
+                return [ meta.id, meta, hifi_reads, hic_reads, assembly, busco_genes, bioproject_id, version, date, tolid, taxid, species ]
         }
         .groupTuple()
         .map { samplesheet ->
             validateInputSamplesheet(samplesheet)
         }
         .set { ch_samplesheet }
-
     emit:
     samplesheet = ch_samplesheet
     versions    = ch_versions
@@ -154,14 +153,24 @@ workflow PIPELINE_COMPLETION {
 // Validate channels from input samplesheet
 //
 def validateInputSamplesheet(input) {
-    def (metas, hifi_reads, hic_reads, assembly, busco_genes) = input[1..5]
+    def (metas, hifi_reads, hic_reads, assembly, busco_genes, bioproject_id, version, date, tolid, taxid, species) = input[1..11]
 
     // Basic validation - ensure all required paths are provided
     if (!hifi_reads[0] || !hic_reads[0] || !assembly[0] || !busco_genes[0]) {
         error("Please check input samplesheet -> All directory paths must be provided for sample: ${metas[0].id}")
     }
 
-    return [ metas[0], hifi_reads[0], hic_reads[0], assembly[0], busco_genes[0] ]
+    // Add the additional metadata to the meta map
+    def enriched_meta = metas[0] + [
+        bioproject_id: bioproject_id[0],
+        version: version[0],
+        date: date[0],
+        tolid: tolid[0],
+        taxid: taxid[0],
+        species: species[0]
+    ]
+
+    return [ enriched_meta, hifi_reads[0], hic_reads[0], assembly[0], busco_genes[0] ]
 }
 //
 // Generate methods description for MultiQC
