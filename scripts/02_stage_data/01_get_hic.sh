@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SAMPLESHEET="/scratch/pawsey0964/lhuet/genomenotes/OceanOmics-OceanGenomes-genomenotes/assets/samplesheet.csv"
+SAMPLESHEET="/scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES/OceanOmics-OceanGenomes-genomenotes/assets/samplesheet.csv"
 s3_bucket="s3:oceanomics/OceanGenomes/illumina-hic"
 tmp_list="$(mktemp)"
 
@@ -46,7 +46,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
   if [[ -z "$target" ]]; then
     user="${USER:-$(whoami)}"
-    target="/scratch/pawsey0964/${user}/genomenotes/${og:-unknown}/hic"
+    target="/scratch/pawsey0964/${user}/PIPELINE_DEV/GEOMENOTES/${og:-unknown}/hic"
     echo "Warning: no hic_dir for remote path; falling back to ${target}" >&2
   fi
 
@@ -58,12 +58,12 @@ done < "$tmp_list"
 rm -f "$tmp_list"
 echo "Done."
 # ...existing code...
-```// filepath: /scratch/pawsey0964/lhuet/genomenotes/OceanOmics-OceanGenomes-genomenotes/scripts/02_stage_data/01_get_hic.sh
+```// filepath: /scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES/OceanOmics-OceanGenomes-genomenotes/scripts/02_stage_data/01_get_hic.sh
 # ...existing code...
 #!/usr/bin/env bash
 set -euo pipefail
 
-SAMPLESHEET="/scratch/pawsey0964/lhuet/genomenotes/OceanOmics-OceanGenomes-genomenotes/assets/samplesheet.csv"
+SAMPLESHEET="/scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES/OceanOmics-OceanGenomes-genomenotes/assets/samplesheet.csv"
 s3_bucket="s3:oceanomics/OceanGenomes/illumina-hic"
 tmp_list="$(mktemp)"
 
@@ -108,7 +108,7 @@ while IFS= read -r line || [[ -n "$line" ]]; do
 
   if [[ -z "$target" ]]; then
     user="${USER:-$(whoami)}"
-    target="/scratch/pawsey0964/${user}/genomenotes/${og:-unknown}/hic"
+    target="/scratch/pawsey0964/${user}/PIPELINE_DEV/GEOMENOTES/${og:-unknown}/hic"
     echo "Warning: no hic_dir for remote path; falling back to ${target}" >&2
   fi
 

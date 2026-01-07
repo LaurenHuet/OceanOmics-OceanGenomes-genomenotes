@@ -6,58 +6,65 @@
 [![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D)](https://www.nextflow.io/)
-[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.4.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064)](https://github.com/nf-core/tools/releases/tag/3.4.1)
-
----
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.04.0-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-3.4.1-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/3.4.1)
+[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
+[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
+[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
+[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/LaurenHuet/OceanOmics-OceanGenomes-genomenotes)
 
 ## Introduction
 
-**OceanOmics-OceanGenomes-genomenotes** is an nf-core–style pipeline for generating genome notes for the Ocean Genomes project, following the principles and structure of the Sanger Tree of Life genome notes. The pipeline integrates sample metadata from the OceanOmics database with staged sequencing data and assemblies to produce standardised, reproducible genome notes.
+**LaurenHuet/OceanOmics-OceanGenomes-genomenotes** is a bioinformatics pipeline that ...
 
----
+<!-- TODO nf-core:
+   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
+   major pipeline sections and the types of output it produces. You're giving an overview to someone new
+   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
+-->
 
-## OceanOmics internal useage
+<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
+     workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
+<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
-To set up the pipeline follow the steps in
+1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
+2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
-- [Oceanomics usage](docs/oceanomics_setup_usage.md)
-  - Contains information on how to use scripts to set up samplesheet from database and how to stage all data using a central configuration file.
----
+## Usage
 
-## Running the pipeline
+> [!NOTE]
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-The pipeline requires a samplesheet with the following format
+<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
+     Explain what rows and columns represent. For instance (please edit as appropriate):
+
+First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,hifi_reads,hic_reads,assembly,busco_genes,bioproject_id,version,date,tolid,taxid,species
-sample1,/path/to/hifi_reads_dir,/path/to/hic_reads_dir,/path/to/assembly_dir,/path/to/busco_genes_dir/bioproject_id,version,date,tolid,taxid,species
-sample2,/path/to/hifi_reads_dir2,/path/to/hic_reads_dir2,/path/to/assembly_dir2,/path/to/busco_genes_dir2/bioproject_id,version,date,tolid,taxid,species
+sample,hifi_reads,hic_reads,assembly,busco_genes
+sample1,/path/to/hifi_reads_dir,/path/to/hic_reads_dir,/path/to/assembly_dir,/path/to/busco_genes_dir
+sample2,/path/to/hifi_reads_dir2,/path/to/hic_reads_dir2,/path/to/assembly_dir2,/path/to/busco_genes_dir2
 ```
+
 Each row represents a sample with the following columns:
 - `sample`: Sample identifier (must be unique)
 - `hifi_reads`: Path to directory containing HiFi reads
 - `hic_reads`: Path to directory containing HiC reads  
 - `assembly`: Path to directory containing assembly files
 - `busco_genes`: Path to directory containing BUSCO genes
-- `bioproject_id`: From the uploaded genome
-- `version`: Oceanomics assembly version
-- `date`: Date of assembly
-- `tolid`: Tree of Life ID for sample
-- `taxid`: NCBI taxon ID for sample
-- `species` : Validated Species ID
 
 You will also need to prepare the following databases:
 - **Taxdump database**: For taxonomic classification
 - **Diamond BLASTP database**: For protein sequence alignment
 - **BLASTN database**: For nucleotide sequence alignment
 
+Now, you can run the pipeline using:
 
-Once the samplesheet has been generated and all data are staged, the pipeline can be run using Nextflow:
+<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
-
+Now, you can run the pipeline using:
 
 ```bash
 nextflow run LaurenHuet/OceanOmics-OceanGenomes-genomenotes \
