@@ -11,7 +11,7 @@ process SEQKIT_SLIDING {
     tuple val(meta), path(assembly)
 
     output:
-    tuple val(meta), path("*.fast*"), emit: fastx
+    tuple val(meta), path("*.fast*"), emit: sliding
     path "versions.yml"             , emit: versions
 
     when:

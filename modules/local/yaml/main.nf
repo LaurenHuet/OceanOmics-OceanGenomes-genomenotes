@@ -17,12 +17,12 @@ process YAML {
     when:
     task.ext.when == null || task.ext.when
 
-    script:
-    def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
-    
-    """
-    cat > ${prefix}.yml <<EOF
+script:
+def args = task.ext.args ?: ''
+def prefix = task.ext.prefix ?: "${meta.id}"
+
+"""
+cat > ${prefix}.yml <<EOF
 assembly:
   alias: ${tolid}
   bioproject: ${bioproject_id}
@@ -32,9 +32,9 @@ taxon:
   name: ${species}
 EOF
 
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bash: \$(bash --version | head -n1 | cut -d' ' -f4)
-    END_VERSIONS
-    """
+cat <<-END_VERSIONS > versions.yml
+"${task.process}":
+    bash: \$(bash --version 2>&1 | head -n1 | cut -d' ' -f4)
+END_VERSIONS
+"""
 }

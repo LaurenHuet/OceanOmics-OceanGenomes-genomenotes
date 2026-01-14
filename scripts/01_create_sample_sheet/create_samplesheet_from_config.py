@@ -5,7 +5,7 @@ bash-compatible pipeline config file (KEY=VALUE). Postgres credentials are read 
 INI file whose path is provided in the pipeline config as POSTGRES_CFG.
 
 Example:
-  singularity run $SING/psycopg2:0.1.sif python create_samplesheet_from_config.py genomenotes_pipeline.conf
+  singularity run $SING/psycopg2:0.1.sif python create_samplesheet_from_config.py ../genomenotes_pipeline.conf
 
 Pipeline config must include at least:
   POSTGRES_CFG=~/postgresql_details/oceanomics.cfg

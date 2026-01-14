@@ -20,59 +20,29 @@ process SEQKIT_SPLIT2 {
     script:
     def args   = task.ext.args   ?: ''
     prefix = task.ext.prefix ?: "${meta.id}"
-    if (meta.single_end) {
-        """
-        seqkit \\
-            split2 \\
-            $args \\
-            --threads $task.cpus \\
-            $fastx \\
-            --out-dir ${prefix}
+    """
+    seqkit \\
+        split2 \\
+        $args \\
+        --threads $task.cpus \\
+        $fastx \\
+        --out-dir ${prefix}
 
-        cat <<-END_VERSIONS > versions.yml
-        "${task.process}":
-            seqkit: \$(echo \$(seqkit 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-        END_VERSIONS
-        """
-    } else {
-        """
-        seqkit \\
-            split2 \\
-            $args \\
-            --threads $task.cpus \\
-            --read1 ${reads[0]} \\
-            --read2 ${reads[1]} \\
-            --out-dir ${prefix}
-
-        cat <<-END_VERSIONS > versions.yml
-        "${task.process}":
-            seqkit: \$(echo \$(seqkit 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-        END_VERSIONS
-        """
-    }
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        seqkit: \$(echo \$(seqkit 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+    END_VERSIONS
+    """
 
     stub:
     prefix = task.ext.prefix ?: "${meta.id}"
-    if (meta.single_end) {
-        """
-        mkdir -p ${prefix}
-        echo "" | gzip > ${prefix}/${reads[0]}
+    """
+    mkdir -p ${prefix}
+    echo "" | gzip > ${prefix}/${fastx}
 
-        cat <<-END_VERSIONS > versions.yml
-        "${task.process}":
-            seqkit: \$(echo \$(seqkit 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-        END_VERSIONS
-        """
-    } else {
-        """
-        mkdir -p ${prefix}
-        echo "" | gzip > ${prefix}/${reads[0]}
-        echo "" | gzip > ${prefix}/${reads[1]}
-
-        cat <<-END_VERSIONS > versions.yml
-        "${task.process}":
-            seqkit: \$(echo \$(seqkit 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
-        END_VERSIONS
-        """
-    }
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        seqkit: \$(echo \$(seqkit 2>&1) | sed 's/^.*Version: //; s/ .*\$//')
+    END_VERSIONS
+    """
 }

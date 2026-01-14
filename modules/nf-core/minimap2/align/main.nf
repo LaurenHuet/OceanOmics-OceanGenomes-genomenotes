@@ -15,6 +15,7 @@ process MINIMAP2_ALIGN {
     val bam_index_extension
     val cigar_paf_format
     val cigar_bam
+    val suffix
 
     output:
     tuple val(meta), path("*.paf")                       , optional: true, emit: paf
@@ -31,8 +32,8 @@ process MINIMAP2_ALIGN {
     def args3 = task.ext.args3 ?: ''
     def args4 = task.ext.args4 ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def bam_index = bam_index_extension ? "${prefix}.bam##idx##${prefix}.bam.${bam_index_extension} --write-index" : "${prefix}.bam"
-    def bam_output = bam_format ? "-a | samtools sort -@ ${task.cpus-1} -o ${bam_index} ${args2}" : "-o ${prefix}.paf"
+    def bam_index = bam_index_extension ? "${prefix}.bam##idx##${prefix}.bam.${bam_index_extension} --write-index" : "${prefix}.${suffix}.bam"
+    def bam_output = bam_format ? "-a | samtools sort -@ ${task.cpus-1} -o ${bam_index} ${args2}" : "-o ${prefix}.${suffix}.paf"
     def cigar_paf = cigar_paf_format && !bam_format ? "-c" : ''
     def set_cigar_bam = cigar_bam && bam_format ? "-L" : ''
     def bam_input = "${reads.extension}".matches('sam|bam|cram')
@@ -61,7 +62,7 @@ process MINIMAP2_ALIGN {
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def output_file = bam_format ? "${prefix}.bam" : "${prefix}.paf"
+    def output_file = bam_format ? "${prefix}.${suffix}.bam" : "${prefix}.${suffix}.paf"
     def bam_index = bam_index_extension ? "touch ${prefix}.bam.${bam_index_extension}" : ""
     def bam_input = "${reads.extension}".matches('sam|bam|cram')
     def target = reference ?: (bam_input ? error("BAM input requires reference") : reads)

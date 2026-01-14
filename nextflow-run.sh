@@ -14,9 +14,9 @@ echo "Created plugins directory: $NXF_HOME/plugins"
 nextflow run main.nf \
    -profile singularity \
    --input assets/samplesheet.csv \
-   --outdir /scratch/pawsey0964/lhuet/genomenotes \
-   --taxdump /scratch/pawsey0964/lhuet/databases/taxdump_25_10 \
+   --outdir /scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES \
+   --taxdump /scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES/taxdump_2026_01_07 \
    --blastp /scratch/pawsey0964/lhuet/databases/RefSeq_protein_25_10_01 \
-   --blastn /scratch/pawsey0964/lhuet/databases/blast_core_nt_2025_10_01 \
+   --blastn /scratch/references/blastdb_update/blast-2025-11-01/db \
    -c pawsey_profile.config -resume \
    --binddir /scratch 

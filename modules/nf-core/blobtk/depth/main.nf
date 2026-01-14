@@ -11,7 +11,7 @@ process BLOBTK_DEPTH {
     tuple val(meta), path(bam), path(index)
 
     output:
-    tuple val(meta), path('*.regions.bed.gz') , emit: bed
+    tuple val(meta), path('*.regions.bed.gz') , emit: coverage_bed
     path "versions.yml"                       , emit: versions
 
     when:

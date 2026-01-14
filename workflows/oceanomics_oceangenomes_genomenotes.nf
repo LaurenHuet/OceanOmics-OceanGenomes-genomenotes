@@ -1,14 +1,28 @@
+#!/usr/bin/env nextflow
+nextflow.enable.dsl = 2
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
+    IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-include { BLOBTOOLS            } from '../subworkflows/local/blobtools/main'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_oceanomics-oceangenomes-genomenotes_pipeline'
+
+include { BLOBTOOLS                   } from '../subworkflows/local/blobtools/main'
+include { MULTIQC                     } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap            } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML      } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText      } from '../subworkflows/local/utils_nfcore_oceanomics-oceangenomes-genomenotes_pipeline'
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    IMPORT NF-CORE MODULES/SUBWORKFLOWS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+//
+// SUBWORKFLOW: Consisting of a mix of local and nf-core/modules
+//
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -16,11 +30,28 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_ocea
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
+def create_samplesheet_channel(LinkedHashMap row) {
+    // Create meta map with all required fields
+    def meta = [:]
+    meta.id               = row.sample
+    meta.bioproject_id    = row.bioproject_id
+    meta.version          = row.version
+    meta.date             = row.date
+    meta.tolid            = row.tolid
+    meta.taxid            = row.taxid
+    meta.species          = row.species
+
+    // Create the channel tuple
+    def array = []
+    array = [ meta, row.hifi_dir, row.hic_dir, row.assembly, row.busco_genes ]
+    
+    return array
+}
+
 workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES {
 
     take:
-    ch_samplesheet // channel: [ enriched_meta, hifi_path, hic_path, assembly_path, busco_path ]
-                   // where enriched_meta contains: id, bioproject_id, version, date, tolid, taxid, species
+    ch_samplesheet // channel: samplesheet already parsed and structured
 
     main:
 
@@ -28,22 +59,17 @@ workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES {
     ch_multiqc_files = Channel.empty()
     
     //
-    // Create channels for different analysis paths
+    // The samplesheet is already properly structured, use it directly
     //
+    ch_samplesheet.set { ch_blobtools_input }
     
-    // Channel for BLOBTOOLS subworkflow - contains all samplesheet data with enriched metadata
-    ch_samplesheet
-        .map { meta, hifi_path, hic_path, assembly_path, busco_path ->
-            // Ensure metadata contains all required fields for YAML generation
-            if (!meta.tolid || !meta.bioproject_id || !meta.taxid || !meta.species) {
-                error("Missing required metadata fields for sample ${meta.id}. Required: tolid, bioproject_id, taxid, species")
-            }
-            return [ meta, hifi_path, hic_path, assembly_path, busco_path ]
-        }
-        .set { ch_blobtools_input }
+    // Debug: View the samplesheet channel structure
+    ch_blobtools_input.view { meta, hifi_path, hic_path, assembly_path, busco_path ->
+        "Sample: ${meta.id}, Species: ${meta.species}, TaxID: ${meta.taxid}, ToLID: ${meta.tolid}"
+    }
     
     //
-    // SUBWORKFLOW: Run BLOBTOOLS (includes YAML generation)
+    // SUBWORKFLOW: Run BLOBTOOLS (just YAML for now)
     //
     BLOBTOOLS (
         ch_blobtools_input
@@ -55,18 +81,16 @@ workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES {
         "Generated YAML config for sample ${meta.id} (${meta.tolid}): ${yml_file}"
     }
 
-
     //
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name:  'oceanomics-oceangenomes-genomenotes_software_'  + 'mqc_'  + 'versions.yml',
+            name: 'nf_core_pipeline_software_mqc_versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
-
 
     //
     // MODULE: MultiQC
@@ -108,9 +132,35 @@ workflow OCEANOMICS_OCEANGENOMES_GENOMENOTES {
         []
     )
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+}
 
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    RUN MAIN WORKFLOW
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
+workflow {
+
+    main:
+
+    //
+    // SUBWORKFLOW: Read in samplesheet, validate and stage input files
+    //
+    ch_input = Channel
+        .fromPath(params.input, checkIfExists: true)
+        .splitCsv(header: true)
+        .map { create_samplesheet_channel(it) }
+
+    //
+    // WORKFLOW: Run main workflow
+    //
+    OCEANOMICS_OCEANGENOMES_GENOMENOTES (
+        ch_input
+    )
 }
 
 /*
