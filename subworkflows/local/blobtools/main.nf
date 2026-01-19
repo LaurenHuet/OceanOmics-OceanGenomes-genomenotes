@@ -20,8 +20,16 @@ include { BLOBTK_DEPTH } from '../../../modules/nf-core/blobtk/depth/main'
 include { SEQKIT_SLIDING } from '../../../modules/nf-core/seqkit/sliding/main'
 include { SEQKIT_SPLIT2 } from '../../../modules/nf-core/seqkit/split2/main'
 include { BLAST_BLASTN } from '../../../modules/nf-core/blast/blastn/main'
-//include { BLOBTOOLS_ADD } from '../../../modules/local/blobtools/add/main'
-//include { BLOBTOOLS_CREATE } from '../../../modules/local/blobtools/create/main'
+include { FASTAWINDOWS } from '../../../modules/nf-core/fastawindows/main'
+include { WINDOWSBED } from '../../../modules/local/windowsbed/main'
+include { BLOBTOOLS_COUNTBUSCOS } from '../../../modules/local/blobtools/count_buscos'
+include { CREATE_BED as BED_FREQ } from '../../../modules/local/blobtools/create_bed'
+include { CREATE_BED as BED_MONONUC } from '../../../modules/local/blobtools/create_bed'
+include { WINDOWSTATS_INPUT } from '../../../modules/local/blobtools/windowstats_input'
+include { BLOBTOOLKIT_WINDOWSTATS } from '../../../modules/local/blobtools/windowstats'
+include { CREATE_BED as BUSCO_BED } from '../../../modules/local/blobtools/create_bed'
+// include { BLOBTOOLS_ADD } from '../../../modules/local/blobtools/add/main'
+// include { BLOBTOOLS_CREATE } from '../../../modules/local/blobtools/create/main'
 
 workflow BLOBTOOLS {
 
@@ -198,6 +206,59 @@ ch_merged_bam_with_index = SAMTOOLS_MERGE.out.bam
 BLOBTK_DEPTH(ch_merged_bam_with_index)
 ch_versions = ch_versions.mix(BLOBTK_DEPTH.out.versions.first())
 
+    //run module fasta windows
+
+    FASTAWINDOWS(ch_assembly)
+    ch_versions = ch_versions.mix(FASTAWINDOWS.out.versions.first())
+
+    WINDOWSBED(ch_assembly,
+    true          // get sizes)
+    )
+    ch_versions = ch_versions.mix(WINDOWSBED.out.versions.first())
+
+    BED_FREQ(FASTAWINDOWS.out.freq)
+    ch_versions = ch_versions.mix(BED_FREQ.out.versions.first())
+
+    BED_MONONUC(FASTAWINDOWS.out.mononuc)
+    ch_versions = ch_versions.mix(BED_MONONUC.out.versions.first())
+
+    // create channel for busco full table
+
+    ch_busco_fulltable = samplesheet_ch
+    .map { meta, hifi_path, hic_path, assembly_path, busco_path ->
+        def full_table = file("${busco_path}/*full_table*.tsv").findAll { it.exists() }
+        if (full_table.isEmpty()) {
+            error "No BUSCO full_table TSV found in ${busco_path} for ${meta.id}"
+        }
+        return [ meta, full_table[0] ]
+    }
+
+    BLOBTOOLS_COUNTBUSCOS(ch_busco_fulltable,
+         WINDOWSBED.out.windows_bed
+         )
+ch_versions = ch_versions.mix(BLOBTOOLS_COUNTBUSCOS.out.versions.first())
+
+BUSCO_BED(BLOBTOOLS_COUNTBUSCOS.out.tsv)
+ch_versions = ch_versions.mix(BUSCO_BED.out.versions.first())
+
+
+/// Moudle for window stats
+
+WINDOWSTATS_INPUT(
+    FASTAWINDOWS.out.freq,
+    FASTAWINDOWS.out.mononuc,
+    BLOBTK_DEPTH.out.coverage_bed,
+    BLOBTOOLS_COUNTBUSCOS.out.tsv
+)
+
+ch_versions = ch_versions.mix(WINDOWSTATS_INPUT.out.versions.first())
+
+    // MODULE: windowstats 
+
+    BLOBTOOLKIT_WINDOWSTATS( WINDOWSTATS_INPUT.out.tsv)
+    
+    ch_versions = ch_versions.mix(BLOBTOOLKIT_WINDOWSTATS.out.versions.first())
+
     //
     // MODULE: SEQKIT_SLIDING - Create sliding windows from assembly for contamination screening
     // Using Sanger-ToL BlobToolKit parameters: 100kb chunks, no overlap
@@ -212,37 +273,40 @@ ch_versions = ch_versions.mix(BLOBTK_DEPTH.out.versions.first())
     SEQKIT_SPLIT2(SEQKIT_SLIDING.out.sliding)
     ch_versions = ch_versions.mix(SEQKIT_SPLIT2.out.versions.first())
 
-    //
-    // Prepare channels for BLAST - flatten the split files and maintain meta.id mapping AND taxid
-    //
-    ch_blast_input = SEQKIT_SPLIT2.out.split_fastx
-        .transpose() // This separates each file in the collection into individual channel items
-        .map { meta, split_file ->
-            // Create unique meta for each split file to ensure separate jobs
-            // BUT preserve the original taxid and other important metadata
-            def split_meta = [
-                id: "${meta.id}_${split_file.baseName}",
-                original_id: meta.id,
-                taxid: meta.taxid,  // Preserve the taxid from original meta
-                species: meta.species ?: "", // Preserve species if available
-                tolid: meta.tolid ?: "",
-                bioproject_id: meta.bioproject_id ?: ""
-            ]
-            return [ split_meta, split_file ]
-        }
+// Prepare database channel with metadata
+ch_blast_db = Channel.value([
+    [id: 'blast_db'], 
+    file(params.blastn)
+])
 
-    //
-    // MODULE: BLAST_BLASTN - Run BLAST on each chunk with contamination screening
-    // Each split file will run as a separate job with taxid exclusion for contamination screening
-    //
-    BLAST_BLASTN(
-        ch_blast_input,
-        params.blastn, // Pass database path directly
-        [], // taxidlist - empty if not used
-        ch_blast_input.map { meta, file -> meta.taxid }, // Use taxid from meta for exclusion
-        true  // negative_tax - set to true to exclude the taxid (contamination screening)
-    )
-    ch_versions = ch_versions.mix(BLAST_BLASTN.out.versions.first())
+ch_blast_input = SEQKIT_SPLIT2.out.split_fastx
+    .transpose() // This separates each file in the collection into individual channel items
+    .map { meta, split_file ->
+        // Create unique meta for each split file to ensure separate jobs
+        // BUT preserve the original taxid and other important metadata
+        def split_meta = [
+            id: "${meta.id}_${split_file.baseName}",
+            original_id: meta.id,
+            taxid: meta.taxid,  // Preserve the taxid from original meta
+            species: meta.species ?: "", // Preserve species if available
+            tolid: meta.tolid ?: "",
+            bioproject_id: meta.bioproject_id ?: ""
+        ]
+        return [ split_meta, split_file ]
+    }
+
+//
+// MODULE: BLAST_BLASTN - Run BLAST on each chunk with contamination screening
+// Each split file will run as a separate job with taxid exclusion for contamination screening
+//
+BLAST_BLASTN(
+    ch_blast_input,
+    ch_blast_db, // Pass database as tuple with metadata
+    [], // taxidlist - empty if not used
+    ch_blast_input.map { meta, file -> meta.taxid }.first(), // Get single taxid value
+    true  // negative_tax - set to true to exclude the taxid (contamination screening)
+)
+ch_versions = ch_versions.mix(BLAST_BLASTN.out.versions.first())
 
     //
     // // Collect BLAST results per sample
@@ -265,6 +329,7 @@ ch_versions = ch_versions.mix(BLOBTK_DEPTH.out.versions.first())
     //         // blast_files is now a list of all BLAST result files for this sample
     //         return [ meta, blast_files ]
     //     }
+
 
     emit:
     yaml_files = YAML.out.yml                           // channel: [ meta, yml_file ]

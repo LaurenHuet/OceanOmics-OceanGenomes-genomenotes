@@ -17,6 +17,7 @@ nextflow run main.nf \
    --outdir /scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES \
    --taxdump /scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES/taxdump_2026_01_07 \
    --blastp /scratch/pawsey0964/lhuet/databases/RefSeq_protein_25_10_01 \
-   --blastn /scratch/references/blastdb_update/blast-2025-11-01/db \
+   --blastn /scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES/blastdb_14_01 \
    -c pawsey_profile.config -resume \
+   -c local_blobtoolkit.config \
    --binddir /scratch 

@@ -110,7 +110,7 @@ latest_seq AS (
          seq.seq_date::date AS seq_date
   FROM sequencing seq
   JOIN p ON seq.og_id = p.og_id
-  WHERE seq.technology = 'PacBio'
+  WHERE seq.seq_type = 'PacBio'
   ORDER BY seq.og_id, seq.seq_date DESC
 ),
 smp AS (
