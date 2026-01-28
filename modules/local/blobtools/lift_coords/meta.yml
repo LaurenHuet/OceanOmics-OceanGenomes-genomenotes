@@ -1,0 +1,44 @@
+name: "blobtools_lift_coords"
+description: Lift coordinates from sliding window format to genome coordinates for BlobTools
+keywords:
+  - blobtools
+  - coordinates
+  - sliding_window
+  - genome
+  - lift
+tools:
+  - "custom":
+      description: "Custom Python script to lift coordinates from sliding window format"
+      homepage: "https://github.com/your-pipeline/your-pipeline"
+      documentation: "https://github.com/your-pipeline/your-pipeline"
+
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - tsv:
+      type: file
+      description: Input TSV file with sliding window coordinates
+      pattern: "*.{tsv,txt}"
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+  - tsv:
+      type: file
+      description: Output TSV file with lifted coordinates
+      pattern: "*.lifted.tsv"
+
+authors:
+  - "@LaurenHuet"
+maintainers:
+  - "@LaurenHuet"

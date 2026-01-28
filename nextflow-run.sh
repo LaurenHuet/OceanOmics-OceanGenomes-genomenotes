@@ -20,4 +20,5 @@ nextflow run main.nf \
    --blastn /scratch/pawsey0964/lhuet/PIPELINE_DEV/GEOMENOTES/blastdb_14_01 \
    -c pawsey_profile.config -resume \
    -c local_blobtoolkit.config \
+   -with-report usage_report_$(date +%Y%m%d_%H%M%S).html \
    --binddir /scratch 
