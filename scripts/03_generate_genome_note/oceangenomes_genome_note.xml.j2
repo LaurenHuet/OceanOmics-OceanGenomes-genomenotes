@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.2 20190208//EN"
+  "http://jats.nlm.nih.gov/publishing/1.2/JATS-journalpublishing1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         article-type="data-paper" dtd-version="1.2" xml:lang="en">
+
+  <!-- ============================================================
+       FRONT MATTER
+       ============================================================ -->
+  <front>
+    <journal-meta>
+      <journal-id journal-id-type="pmc">Wellcome Open Res</journal-id>
+      <journal-title-group>
+        <journal-title>Wellcome Open Research</journal-title>
+      </journal-title-group>
+      <issn pub-type="epub">2398-502X</issn>
+      <publisher>
+        <publisher-name>F1000 Research Limited</publisher-name>
+        <publisher-loc>London, UK</publisher-loc>
+      </publisher>
+    </journal-meta>
+
+    <article-meta>
+      <article-id pub-id-type="doi">{{ doi }}</article-id>
+
+      <article-categories>
+        <subj-group subj-group-type="heading">
+          <subject>Data Note</subject>
+        </subj-group>
+        <subj-group>
+          <subject>Articles</subject>
+        </subj-group>
+      </article-categories>
+
+      <title-group>
+        <article-title>The genome sequence of the {{ common_name }},
+          <italic>{{ species_name }}</italic> ({{ authority }})
+        </article-title>
+        <fn-group content-type="pub-status">
+          <fn>
+            <p>[version 1; peer review: awaiting peer review]</p>
+          </fn>
+        </fn-group>
+      </title-group>
+
+      <!-- ── Authors ── -->
+      <contrib-group>
+        <!-- Named collector(s) -->
+        {% for collector in collectors %}
+        <contrib contrib-type="author" corresp="no">
+          <name>
+            <surname>{{ collector.surname }}</surname>
+            <given-names>{{ collector.given_names }}</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/">Investigation</role>
+          <role content-type="http://credit.niso.org/">Resources</role>
+          {% if collector.orcid %}<uri content-type="orcid">{{ collector.orcid }}</uri>{% endif %}
+          <xref ref-type="aff" rid="a{{ collector.aff_num }}">{{ collector.aff_num }}</xref>
+        </contrib>
+        {% endfor %}
+
+        <!-- Background / intro writer -->
+        {% for writer in intro_writers %}
+        <contrib contrib-type="author" corresp="no">
+          <name>
+            <surname>{{ writer.surname }}</surname>
+            <given-names>{{ writer.given_names }}</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/">Writing &#x2013; Original Draft Preparation</role>
+          {% if writer.orcid %}<uri content-type="orcid">{{ writer.orcid }}</uri>{% endif %}
+          <xref ref-type="aff" rid="a{{ writer.aff_num }}">{{ writer.aff_num }}</xref>
+        </contrib>
+        {% endfor %}
+
+        <!-- Genome curator -->
+        {% for curator in curators %}
+        <contrib contrib-type="author" corresp="no">
+          <name>
+            <surname>{{ curator.surname }}</surname>
+            <given-names>{{ curator.given_names }}</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/">Data Curation</role>
+          <role content-type="http://credit.niso.org/">Writing &#x2013; Review &amp; Editing</role>
+          {% if curator.orcid %}<uri content-type="orcid">{{ curator.orcid }}</uri>{% endif %}
+          <xref ref-type="aff" rid="a{{ curator.aff_num }}">{{ curator.aff_num }}</xref>
+        </contrib>
+        {% endfor %}
+
+        <!-- OceanOmics Centre contributors -->
+        {% for contributor in contributors %}
+        <contrib contrib-type="author" corresp="no">
+          <name>
+            <surname>{{ contributor.surname }}</surname>
+            <given-names>{{ contributor.given_names }}</given-names>
+          </name>
+          <role content-type="http://credit.niso.org/">Methodology</role>
+          <role content-type="http://credit.niso.org/">Writing &#x2013; Review &amp; Editing</role>
+          {% if contributor.orcid %}<uri content-type="orcid">{{ contributor.orcid }}</uri>{% endif %}
+          <xref ref-type="aff" rid="a{{ contributor.aff_num }}">{{ contributor.aff_num }}</xref>
+        </contrib>
+        {% endfor %}
+
+        <!-- OceanOmics Division — listed as a collab group; members expanded in Author information -->
+        {% if oceanomics_division %}
+        <contrib contrib-type="author" corresp="no">
+          <collab>OceanOmics Division</collab>
+        </contrib>
+        {% endif %}
+
+        <!-- Affiliations (deduplicated — identical addresses share one entry) -->
+        {% for aff in unique_affs %}
+        <aff id="{{ aff.id }}">
+          <label>{{ aff.label }}</label>{{ aff.text }}
+        </aff>
+        {% endfor %}
+      </contrib-group>
+
+      <author-notes>
+        <corresp id="c1">
+          <label>a</label>
+          <email xlink:href="mailto:{{ centre_email }}">{{ centre_email }}</email>
+        </corresp>
+        <fn fn-type="conflict">
+          <p>No competing interests were disclosed.</p>
+        </fn>
+      </author-notes>
+
+      <pub-date pub-type="epub">
+        <day>{{ pub_day }}</day>
+        <month>{{ pub_month }}</month>
+        <year>{{ pub_year }}</year>
+      </pub-date>
+      <pub-date pub-type="collection">
+        <year>{{ pub_year }}</year>
+      </pub-date>
+
+      <!-- ── Abstract ── -->
+      <abstract>
+        <p>We present a genome assembly from a{% if specimen_sex %} {{ specimen_sex }}{% endif %} specimen of
+          <italic>{{ species_name }}</italic>, the {{ common_name }}
+          ({{ higher_taxonomy }}). The genome assembly includes two haplotypes
+          with total lengths of {{ hap1_total_length_mb }} and
+          {{ hap2_total_length_mb }} megabases. Both haplotypes are
+          chromosome-level (2n={{ chromosome_count }}) with
+          {{ hap1_pct_assigned }}% of scaffolds assigned to chromosomes in
+          haplotype 1 and {{ hap2_pct_assigned }}% assigned in haplotype 2.
+          The mitochondrial genome has also been assembled, with a length of
+          {{ mito_length_kb }} kilobases.</p>
+      </abstract>
+
+      <kwd-group kwd-group-type="author">
+        <kwd><italic>{{ species_name }}</italic></kwd>
+        <kwd>{{ common_name }}</kwd>
+        <kwd>genome sequence</kwd>
+        <kwd>chromosomal</kwd>
+        <kwd>{{ order }}</kwd>
+      </kwd-group>
+
+      <funding-group>
+        <award-group id="fund-1">
+          <funding-source>Minderoo Foundation</funding-source>
+          <award-id>OceanOmics</award-id>
+        </award-group>
+        <funding-statement>This work was supported by the Minderoo Foundation
+          through the OceanOmics initiative.</funding-statement>
+      </funding-group>
+    </article-meta>
+  </front>
+
+  <!-- ============================================================
+       BODY
+       ============================================================ -->
+  <body>
+
+    <!-- ── Species taxonomy ── -->
+    <sec>
+      <title>Species taxonomy</title>
+      <p>{{ full_taxonomy_string }} <italic>{{ species_name }}</italic> ({{ authority }}) (NCBI:txid{{ ncbi_taxid }})</p>
+    </sec>
+
+    <!-- ── Background ── (MANUAL ENTRY — species-specific) -->
+    <sec>
+      <title>Background</title>
+      <!-- INSERT SPECIES BACKGROUND HERE -->
+      {{ background_paragraphs }}
+      <p>Here, we present a chromosome-level, haplotype-resolved genome
+        assembly of the {{ common_name }},
+        <italic>{{ species_name }}</italic>. The sequence was derived from a
+        {% if specimen_sex %}{{ specimen_sex }} {% endif %}specimen (<xref ref-type="fig" rid="f1">Figure 1</xref>),
+        collected from {{ collection_location }}.</p>
+
+      <!-- Figure 1: Specimen photograph -->
+      <fig fig-type="figure" id="f1" orientation="portrait" position="float">
+        <label>Figure 1. </label>
+        <caption>
+          <title>Photograph of the
+            <italic>{{ species_name }}</italic> ({{ tolid }}) specimen used
+            for genome sequencing.</title>
+        </caption>
+        <graphic orientation="portrait" position="float"
+                 xlink:href="{{ specimen_photo_path }}"/>
+      </fig>
+    </sec>
+
+    <!-- ── Methods ── -->
+    <sec sec-type="methods">
+      <title>Methods</title>
+
+      <sec>
+        <title>Sample acquisition</title>
+        <p>An adult{% if specimen_sex %} {{ specimen_sex }}{% endif %}
+          <italic>{{ species_name }}</italic> (ToLID {{ tolid }}) was collected
+          from {{ collection_location }} (latitude {{ latitude }},
+          longitude {{ longitude }}) on {{ collection_date }}. The specimen was
+          collected by {{ collector_names }} from the {{ institution }}
+          ({{ institution_abbrev }}) on {{ collection_method }}. The specimen
+          {% if formal_voucher %}was {{ preservation_method }} and subsequently accessioned into the
+          {{ institution_abbrev }} as
+          <italic>{{ species_name }}</italic> voucher ID {{ voucher_id }}.{% else %}is held at the {{ institution }} ({{ institution_abbrev }}).{% endif %}</p>
+      </sec>
+
+      <sec>
+        <title>DNA extraction, library preparation and sequencing</title>
+        <p>High molecular weight (HMW) genomic DNA was extracted from
+          approximately 25 mg of {{ hifi_tissue }} tissue. Tissue was
+          homogenised using the TissueRuptor II (QIAGEN, Hilden, Germany)
+          and then pelleted as per the PacBio Nanobind tissue kit
+          (PacBio, CA, USA) protocol. Cell lysis and DNA isolation were
+          performed following the PacBio &#x201c;Extracting HMW DNA from
+          skeletal muscle using Nanobind&#x201d; procedure (102-579-200,
+          Dec 2022). The quantity and fragment length distribution of
+          extracted gDNA were
+          determined using a Qubit 3 Fluorometer with the Qubit dsDNA
+          Broad-Range Assay Kit (Thermo Fisher Scientific, MA, USA), a
+          NanoDrop One (Thermo Fisher Scientific, MA, USA) and a Femto Pulse
+          with the Genomic DNA 165kb kit (Agilent, CA, USA). A PacBio HiFi
+          SMRTbell&#x00ae; library was prepared using the PacBio SMRTbell&#x00ae;
+          prep kit 3.0 according to manufacturer&#x2019;s instructions. The
+          library was sequenced on a {{ pacbio_platform }}.</p>
+      </sec>
+
+      <sec>
+        <title>Hi-C library construction and sequencing</title>
+        <p>Cryogenic grinding of flash-frozen {{ hic_tissue }} tissue in liquid
+          nitrogen was used to facilitate the construction of a
+          {{ hic_lib_type }} library, using the {{ hic_prep_module }} and
+          Dovetail Library Module for Illumina kits (Cantata Bio, CA, USA) as
+          per the manufacturer&#x2019;s protocols.{% if hic_shallow_platform %}
+          Shallow sequencing of the Hi-C libraries was performed on a
+          {{ hic_shallow_platform }} platform using a 2 &#x00d7; 150 bp
+          paired-end run to assess library complexity.{% endif %}
+          Deep sequencing of Hi-C data was carried out on a
+          {{ hic_deep_platform }} platform with a 2 &#x00d7; 150 bp
+          paired-end run configuration to generate chromosome conformation
+          data.</p>
+      </sec>
+
+      {% if rna_tissues %}
+      <sec>
+        <title>RNA extraction, library construction and sequencing</title>
+        <p>Flash-frozen {{ rna_tissues }} tissue from the same specimen was
+          used for RNA extraction using the RNeasy&#x00ae; Fibrous Tissue Mini
+          Kit (Qiagen, Germany) according to the manufacturer&#x2019;s
+          instructions. RNA concentration was quantified using a
+          Qubit&#x2122; fluorometer with the Qubit&#x2122; RNA High
+          Sensitivity (HS) Assay Kit (Thermo Fisher Scientific, USA) and
+          cross-checked with a NanoDrop&#x2122; spectrophotometer (Thermo
+          Fisher Scientific, USA). RNA integrity and fragment size distribution
+          were assessed on an Agilent TapeStation system using the appropriate
+          RNA ScreenTape assay (Agilent Technologies, USA). Total RNA extracted
+          from {{ rna_tissues }} from the same individual was used as input for
+          the Iso-Seq Express 2.0 Kit (Pacific Biosciences, USA) in separate
+          reactions to generate barcoded full-length cDNA, following the
+          manufacturer&#x2019;s instructions. The resulting full-length cDNA
+          libraries for each tissue were then processed independently using the
+          PacBio Kinnex&#x2122; full-length RNA Kit (Pacific Biosciences, USA)
+          to produce concatenated SMRTbell&#x00ae; libraries for Iso-Seq
+          analysis. Kinnex libraries were sequenced on a PacBio Revio system
+          (Pacific Biosciences, USA).</p>
+      </sec>
+      {% endif %}
+
+    </sec>
+
+    <!-- ── Genome assembly, curation and evaluation ── -->
+    <sec>
+      <title>Genome assembly, curation and evaluation</title>
+
+      <sec>
+        <title>Assembly</title>
+          <p>Raw PacBio HiFi reads were quality-assessed using FastQC
+            (<xref ref-type="bibr" rid="ref-andrews2010">Andrews, 2010</xref>)
+            and adapter-filtered using HiFiAdapterFilt
+            (<xref ref-type="bibr" rid="ref-sim2022">Sim
+              <italic>et al.</italic>, 2022</xref>), which uses BBMap
+            (<xref ref-type="bibr" rid="ref-bushnell2014">Bushnell,
+              2014</xref>) internally for alignment.</p>
+          <p>Prior to assembly of the PacBio HiFi reads, a database of k-mer
+            counts (k&#x2009;=&#x2009;31) was generated from the filtered reads
+            using Meryl (<xref ref-type="bibr" rid="ref-rhie2020">Rhie
+              <italic>et al.</italic>, 2020</xref>). GenomeScope2
+            (<xref ref-type="bibr" rid="ref-ranallo2020">Ranallo-Benavidez
+              <italic>et al.</italic>, 2020</xref>) was used to analyse the
+            k-mer frequency distributions, providing estimates of genome size,
+            heterozygosity, homozygosity, and repeat content. The HiFi reads
+            were assembled using Hifiasm
+            (<xref ref-type="bibr" rid="ref-cheng2021">Cheng
+              <italic>et al.</italic>, 2021, 2022</xref>) in Hi-C phasing mode,
+            resulting in a pair of haplotype-resolved assemblies. Initial
+            assembly quality statistics were generated with Gfastats
+            (<xref ref-type="bibr" rid="ref-formenti2022">Formenti
+              <italic>et al.</italic>, 2022</xref>), BUSCO
+            (<xref ref-type="bibr" rid="ref-manni2021">Manni
+              <italic>et al.</italic>, 2021</xref>) and MerquryFK
+            (<xref ref-type="bibr" rid="ref-rhie2020">Rhie
+              <italic>et al.</italic>, 2020</xref>).</p>
+          <p>Hi-C reads were mapped to the primary contigs using the OMNIC
+            pipeline (Cantata Bio, CA, USA), with alignment performed using
+            BWA-MEM (<xref ref-type="bibr" rid="ref-li2009bwa">Li &amp; Durbin,
+              2009</xref>) and contact extraction using pairtools
+            (<xref ref-type="bibr" rid="ref-open2c2024">Open2C
+              <italic>et al.</italic>, 2024</xref>). Scaffolding was performed by YaHs
+            (<xref ref-type="bibr" rid="ref-zhou2023">Zhou
+              <italic>et al.</italic>, 2023</xref>) using the
+            --no-contig-ec option to prevent over-fragmentation of the input
+            contigs. The scaffolded assemblies were decontaminated using NCBI
+            FCS-GX and Tiara
+            (<xref ref-type="bibr" rid="ref-karlicki2022">Karlicki
+              <italic>et al.</italic>, 2022</xref>) for mitochondrion contamination. The resulting
+            decontaminated assemblies were evaluated using Gfastats
+            (<xref ref-type="bibr" rid="ref-formenti2022">Formenti
+              <italic>et al.</italic>, 2022</xref>), BUSCO
+            (<xref ref-type="bibr" rid="ref-manni2021">Manni
+              <italic>et al.</italic>, 2021</xref>) and MerquryFK
+            (<xref ref-type="bibr" rid="ref-rhie2020">Rhie
+              <italic>et al.</italic>, 2020</xref>). TIDK
+            (<xref ref-type="bibr" rid="ref-brown2025">Brown
+              <italic>et al.</italic>, 2025</xref>) was used to predict
+            telomeres in the assemblies and BEDtools
+            (<xref ref-type="bibr" rid="ref-quinlan2010">Quinlan &amp; Hall,
+              2010</xref>) was used to generate coverage and gaps tracks
+            injected into Pretext Maps
+            (<xref ref-type="bibr" rid="ref-harry2022">Harry, 2022</xref>)
+            to prepare the genome for manual curation. Processing of the
+            assembly was done using the Nextflow
+            (<xref ref-type="bibr" rid="ref-ewels2020">Ewels
+              <italic>et al.</italic>, 2020</xref>) pipeline
+            <ext-link ext-link-type="uri"
+              xlink:href="https://github.com/Minderoo-OceanOmics-Centre-UWA/OceanOmics-OceanGenomes-ref-genomes"
+              >OceanOmics-OceanGenomes-ref-genomes.v1.0.0</ext-link>, using tools
+            containerised with Singularity
+            (<xref ref-type="bibr" rid="ref-kurtzer2017">Kurtzer
+              <italic>et al.</italic>, 2017</xref>).</p>
+          <p>The mitochondrial genome was assembled using MitoHiFi
+            (<xref ref-type="bibr" rid="ref-uliano2023">Uliano-Silva
+              <italic>et al.</italic>, 2023</xref>), which runs MitoFinder
+            (<xref ref-type="bibr" rid="ref-allio2020">Allio
+              <italic>et al.</italic>, 2020</xref>), and uses these annotations
+            to select the final mitochondrial contig and to ensure the general
+            quality of the sequence.</p>
+        </sec>
+
+        <sec>
+          <title>Curation</title>
+          <p>Manual curation was conducted using PretextView
+            (<xref ref-type="bibr" rid="ref-harry2022">Harry, 2022</xref>),
+            with additional insights provided by BUSCO-based synteny plots
+            (chromsyn). Scaffolds were visually inspected and corrected as
+            described by Howe <italic>et al.</italic>
+            (<xref ref-type="bibr" rid="ref-howe2021">2021</xref>). Any
+            identified contamination, missed joins, and mis-joins were
+            corrected, and duplicate sequences were tagged and removed.</p>
+        </sec>
+
+        <sec>
+          <title>Evaluation of the final assembly</title>
+          <p>The MerquryFK tool
+            (<xref ref-type="bibr" rid="ref-rhie2020">Rhie
+              <italic>et al.</italic>, 2020</xref>) was used to evaluate
+            k-mer completeness and assembly quality for the curated haplotypes,
+            using the k-mer databases (k&#x2009;=&#x2009;31) computed before
+            genome assembly. The analysis outputs included k-mer plots, assembly
+            QV scores and completeness statistics. Gfastats
+            (<xref ref-type="bibr" rid="ref-formenti2022">Formenti
+              <italic>et al.</italic>, 2022</xref>) was used to assess
+            contiguity and BUSCO
+            (<xref ref-type="bibr" rid="ref-manni2021">Manni
+              <italic>et al.</italic>, 2021</xref>) was used to assess
+            completeness of the assemblies.</p>
+          <p>The final assembly was also analysed with BlobToolKit
+            (<xref ref-type="bibr" rid="ref-challis2020">Challis
+              <italic>et al.</italic>, 2020</xref>) using the
+            OceanOmics-OceanGenomes-genomenotes pipeline. It aligned the HiFi
+            and Hi-C reads to the assemblies using minimap2
+            (<xref ref-type="bibr" rid="ref-li2018">Li, 2018</xref>) and
+            SAMtools (<xref ref-type="bibr" rid="ref-li2009sam">Li
+              <italic>et al.</italic>, 2009</xref>) and generated coverage
+            tracks for regions of fixed size (1 kb). BUSCO genes were counted
+            in regions of fixed size (1 kb) and stats were calculated per
+            window to assess GC and AT content. In parallel, the assembly was
+            chunked with Seqkit and split into sliding windows of 100,000 kb.
+            The chunks were aligned to the core_nt database using BLAST+
+            (<xref ref-type="bibr" rid="ref-camacho2009">Camacho
+              <italic>et al.</italic>, 2009</xref>) to screen for any
+            additional contamination. The resulting files were used as input to
+            generate a blobdir for visualisation. Quality control outputs across
+            the pipeline were aggregated using MultiQC
+            (<xref ref-type="bibr" rid="ref-ewels2016">Ewels
+              <italic>et al.</italic>, 2016</xref>).</p>
+        </sec>
+    </sec>
+
+    <!-- ── Genome sequence report ── -->
+    <sec>
+      <title>Genome sequence report</title>
+
+      <sec>
+        <title>Sequencing data</title>
+        <p>The genome of an adult{% if specimen_sex %} {{ specimen_sex }}{% endif %}
+          <italic>{{ species_name }}</italic> was sequenced using Pacific
+          Biosciences single-molecule HiFi long reads, generating a total of
+          {{ hifi_gb }} Gb (gigabases) of HiFi data from {{ hifi_read_count }}
+          reads. Chromosome conformation Hi-C sequencing produced
+          {{ hic_gb }} Gb of data from {{ hic_read_count }} reads. The raw
+          sequence data obtained is summarised in
+          <xref ref-type="table" rid="T1">Table 1</xref>.</p>
+        <p>GenomeScope k-mer profiling (k&#x2009;=&#x2009;31) of the raw
+          PacBio HiFi data estimated the haploid genome to be
+          {{ genomescope_size_bp }} bp. Heterozygosity was estimated at
+          {{ heterozygosity_pct }}% and repeat content was
+          {{ repeat_size_bp }} bp
+          (<xref ref-type="fig" rid="f2">Figure 2</xref>). The coverage of
+          the PacBio sequencing was {{ hifi_coverage }}x and the Hi-C was
+          {{ hic_coverage }}x.</p>
+
+        <!-- Figure 2: GenomeScope k-mer profile -->
+        <fig fig-type="figure" id="f2" orientation="portrait" position="float">
+          <label>Figure 2. </label>
+          <caption>
+            <title>GenomeScope2 k-mer frequency plot for
+              <italic>{{ species_name }}</italic>.</title>
+            <p>K-mer frequency distribution (k&#x2009;=&#x2009;31) of the raw
+              PacBio HiFi reads plotted using GenomeScope2. The x-axis shows
+              k-mer coverage depth and the y-axis shows the frequency of k-mers
+              at each depth. Peaks correspond to heterozygous and homozygous
+              sequence fractions. Estimated genome size:
+              {{ genomescope_size_mb }} Mb; heterozygosity:
+              {{ heterozygosity_pct }}%; repeat content:
+              {{ repeat_size_bp }} bp.</p>
+          </caption>
+          <graphic orientation="portrait" position="float"
+                   xlink:href="{{ genomescope_plot_path }}"/>
+        </fig>
+
+        <!-- Table 1: Raw sequencing data -->
+        <table-wrap id="T1" orientation="portrait" position="anchor">
+          <label>Table 1. </label>
+          <caption>
+            <title>Sequence data information for the genome assembly of
+              <italic>{{ species_name }}</italic>. ToLID refers to the unique
+              identifier assigned to the specimen. BioSample describes the
+              biological source material from which the data were generated,
+              and the run accessions refer to the identifiers assigned to the
+              raw sequencing reads for each dataset.</title>
+          </caption>
+          <table content-type="article-table" frame="hsides">
+            <thead>
+              <tr>
+                <th align="left" rowspan="1" colspan="1" valign="top"></th>
+                <th align="left" rowspan="1" colspan="1" valign="top">PacBio HiFi</th>
+                <th align="left" rowspan="1" colspan="1" valign="top">Hi-C</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">ToLID</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ tolid }}</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ tolid }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Tissue</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hifi_tissue }}</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hic_tissue }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Sequencing platform</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ pacbio_platform }}</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hic_platform }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">BioSample</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hifi_biosample }}</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hic_biosample }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Run accessions</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hifi_run_accession }}</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hic_run_accession }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Read count total</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hifi_read_count }}</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hic_read_count }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Base count total</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hifi_gb }} Gb</td>
+                <td align="left" rowspan="1" colspan="1" valign="top">{{ hic_gb }} Gb</td>
+              </tr>
+            </tbody>
+          </table>
+        </table-wrap>
+      </sec>
+
+      <sec>
+        <title>Assembly statistics</title>
+        <p>Haplotype 1 and Haplotype 2 were assembled using Hi-C phasing and
+          scaffolded, the two haplotypes were combined for manual curation. The
+          resulting curated assemblies were processed through the OceanOmics
+          post-curation pipeline (<ext-link ext-link-type="uri"
+            xlink:href="https://github.com/Minderoo-OceanOmics-Centre-UWA/OceanOmics-OceanGenomes-post-curation/tree/master"
+            >OceanOmics-OceanGenomes-post-curation</ext-link>) for
+          quality checks.</p>
+        <p>The final haplotype 1 assembly had a total length of
+          {{ hap1_total_length_mb }} Mb, with a scaffold N50 of
+          {{ hap1_scaffold_n50_mb }} Mb and {{ hap1_num_gaps }} gaps
+          (<xref ref-type="table" rid="T2">Table 2</xref>).</p>
+        <p>A total of {{ hap1_pct_assigned }}% of scaffolds were assigned to
+          {{ hap1_num_autosomes }} autosomal chromosomes. Chromosome-scale
+          scaffolds confirmed by the Hi-C data are named in order of size
+          (<xref ref-type="fig" rid="f3">Figure 3</xref>).</p>
+        <p>The mitochondrial genome was also assembled and has been submitted as
+          a standalone record to GenBank.</p>
+
+        <!-- Table 2: Assembly statistics -->
+        <table-wrap id="T2" orientation="portrait" position="anchor">
+          <label>Table 2. </label>
+          <caption>
+            <title>Genome assembly information for
+              <italic>{{ species_name }}</italic> showing assembly metric
+              benchmarks adapted from Rhie <italic>et al.</italic>
+            (<xref ref-type="bibr" rid="ref-rhie2021">2021</xref>) and
+              the Earth BioGenome Project Report on Assembly Standards
+              September 2024 for the chromosome-level assembly, compared with
+              results from haplotype 1 and haplotype 2.</title>
+          </caption>
+          <table content-type="article-table" frame="hsides">
+            <thead>
+              <tr>
+                <th align="left" rowspan="2" colspan="1" valign="top">Metric</th>
+                <th align="center" rowspan="1" colspan="2" valign="top">Consortia standards</th>
+                <th align="center" rowspan="1" colspan="2" valign="top">
+                  <italic>{{ species_name }}</italic>
+                </th>
+              </tr>
+              <tr>
+                <th align="center" rowspan="1" colspan="1" valign="top">EBP</th>
+                <th align="center" rowspan="1" colspan="1" valign="top">VGP</th>
+                <th align="center" rowspan="1" colspan="1" valign="top">Haplotype 1</th>
+                <th align="center" rowspan="1" colspan="1" valign="top">Haplotype 2</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Assembly name</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_assembly_name }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_assembly_name }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Assembly accession</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_bioproject }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_bioproject }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Assembly level</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">chromosome</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">chromosome</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">chromosome</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">chromosome</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Total length (Mb)</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_total_length_mb }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_total_length_mb }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Contig N50 (Mb)</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2265;&#x2009;10 Mb</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2265;&#x2009;10</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_contig_n50_mb }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_contig_n50_mb }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Number of scaffolds</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_num_scaffolds }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_num_scaffolds }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Number of gaps</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_num_gaps }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_num_gaps }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Scaffold N50 (Mb)</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">= chr N50</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">= chr N50</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_scaffold_n50_mb }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_scaffold_n50_mb }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Consensus quality (QV)</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2265;&#x2009;40</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">39&#x2013;43</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_qv }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_qv }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">BUSCO (S; D)</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">S&#x2009;&gt;&#x2009;90%; D&#x2009;&lt;&#x2009;5%</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">C&#x2009;&#x2265;&#x2009;95%</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">S {{ hap1_busco_single }}; D {{ hap1_busco_dup }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">S {{ hap2_busco_single }}; D {{ hap2_busco_dup }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Assembly assigned to chromosomes (%)</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2265;&#x2009;90%</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&gt;&#x2009;95%</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap1_pct_assigned }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ hap2_pct_assigned }}</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Sex chromosomes</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">{{ sex_chromosomes }}</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+              </tr>
+              <tr>
+                <td align="left" rowspan="1" colspan="1" valign="top">Organelles</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">Mitochondrial genome: {{ mito_length_kb }} kb</td>
+                <td align="center" rowspan="1" colspan="1" valign="top">&#x2014;</td>
+              </tr>
+            </tbody>
+          </table>
+        </table-wrap>
+
+        <!-- Figure 3: Hi-C contact map hap1 -->
+        <fig fig-type="figure" id="f3" orientation="portrait" position="float">
+          <label>Figure 3. </label>
+          <caption>
+            <title>Genome assembly of
+              <italic>{{ species_name }}</italic> {{ hap1_assembly_name }}: Hi-C contact map.</title>
+            <p>Hi-C contact map of the {{ hap1_assembly_name }} assembly
+              produced by PretextView. Chromosomes are ordered by size from
+              left to right and top to bottom.</p>
+          </caption>
+          <graphic orientation="portrait" position="float"
+                   xlink:href="{{ hap1_hic_contact_map_path }}"/>
+        </fig>
+      </sec>
+
+      <sec>
+        <title>Assembly quality metrics</title>
+        <p>The BUSCO completeness scores, estimated Quality Value (QV) and
+          k-mer completeness metrics were computed for each haplotype and the
+          combined assembly. BUSCO scores provide a measure of completeness
+          based on benchmarking universal single-copy orthologs. The QV
+          measures the base-level consensus accuracy of the genome assembly
+          while completeness indicates the proportion of expected k-mers
+          identified in the assembly.</p>
+        <p>BUSCO analysis performed using the {{ busco_lineage }} reference
+          database identified {{ hap1_busco_complete_pct }}% of expected genes
+          in haplotype 1 (single copy {{ hap1_busco_single }}%, duplicated
+          {{ hap1_busco_dup }}%) and {{ hap2_busco_complete_pct }}% in
+          haplotype 2 (single copy {{ hap2_busco_single }}%, duplicated
+          {{ hap2_busco_dup }}%).</p>
+        <p>The QV for haplotype 1 is {{ hap1_qv }}, and {{ hap2_qv }} for
+          haplotype 2. Combining both haplotypes yields a QV of
+          {{ combined_qv }}. The k-mer completeness for haplotype 1 is
+          {{ hap1_kmer_completeness }}% and {{ hap2_kmer_completeness }}% for
+          haplotype 2. The combined completeness of both haplotypes is
+          {{ combined_kmer_completeness }}%.
+          <xref ref-type="fig" rid="f4">Figure 4</xref> shows the frequency
+          distribution of k-mers that are unique to each haplotype (red and
+          blue curves) and shared between the haplotypes (green curve).</p>
+        <p>The snail plot in
+          <xref ref-type="fig" rid="f5">Figure 5</xref> provides a
+          scaffold-level overview of the assembly. Scaffolds are arranged by
+          length around the circumference, with arcs highlighting the largest
+          scaffold and the N50 and N90 lengths. The plot also displays GC, AT,
+          and N content across scaffold bins, as well as a cumulative count of
+          scaffolds in the centre. The blob plot in
+          <xref ref-type="fig" rid="f6">Figure 6</xref> visualises GC content
+          on the horizontal axis and coverage on the vertical axis, with each
+          point representing a scaffold sized by length.</p>
+
+        <!-- Figure 4: MerquryFK k-mer plot -->
+        <fig fig-type="figure" id="f4" orientation="portrait" position="float">
+          <label>Figure 4. </label>
+          <caption>
+            <title>Evaluation of k-mer completeness using MerquryFK for
+              <italic>{{ species_name }}</italic> {{ hap1_assembly_name }}.</title>
+            <p>This plot illustrates the recovery of k-mers from the original
+              read data in the final assemblies. The horizontal axis shows
+              k-mer multiplicity, and the vertical axis shows the number of
+              k-mers. The grey curve represents k-mers that appear in the reads
+              but are not assembled. The green curve corresponds to k-mers
+              shared by both assemblies (the homozygous peak), and the red and
+              blue curves show k-mers found only in haplotype 1 or haplotype 2,
+              respectively (the heterozygous peaks).</p>
+          </caption>
+          <graphic orientation="portrait" position="float"
+                   xlink:href="{{ merqury_kmer_plot_path }}"/>
+        </fig>
+
+        <!-- Figure 5: Snail plot -->
+        <fig fig-type="figure" id="f5" orientation="portrait" position="float">
+          <label>Figure 5. </label>
+          <caption>
+            <title>Genome assembly of
+              <italic>{{ species_name }}</italic> {{ hap1_assembly_name }}: metrics.</title>
+            <p>The BlobToolKit snail plot provides an overview of assembly
+              metrics and BUSCO gene completeness. The circumference represents
+              the length of the whole genome sequence, and the main plot is
+              divided into 1,000 bins around the circumference. The outermost
+              blue tracks display the distribution of GC, AT, and N percentages
+              across the bins. Scaffolds are arranged clockwise from longest to
+              shortest and are depicted in dark grey. The longest scaffold is
+              indicated by the red arc, and the deeper orange and pale orange
+              arcs represent the N50 and N90 lengths. A light grey spiral at
+              the centre shows the cumulative scaffold count on a logarithmic
+              scale. A summary of complete, fragmented, duplicated, and missing
+              BUSCO genes in the set is presented at the top right.</p>
+          </caption>
+          <graphic orientation="portrait" position="float"
+                   xlink:href="{{ hap1_snail_plot_path }}"/>
+        </fig>
+
+        <!-- Figure 6: Blob/GC-coverage plot -->
+        <fig fig-type="figure" id="f6" orientation="portrait" position="float">
+          <label>Figure 6. </label>
+          <caption>
+            <title>Genome assembly of
+              <italic>{{ species_name }}</italic> {{ hap1_assembly_name }}: BlobToolKit GC-coverage plot.</title>
+            <p>Blob plot showing sequence coverage (vertical axis) and GC
+              content (horizontal axis). The circles represent scaffolds, with
+              the size proportional to scaffold length and the colour
+              representing phylum membership. The histograms along the axes
+              display the total length of sequences distributed across different
+              levels of coverage and GC content.</p>
+          </caption>
+          <graphic orientation="portrait" position="float"
+                   xlink:href="{{ hap1_blob_plot_path }}"/>
+        </fig>
+
+      </sec>
+    </sec>
+
+    <!-- ── Data use and attribution ── -->
+    <sec>
+      <title>Data use and attribution</title>
+      <p>OceanOmics Centre is committed to providing data and capabilities for
+        public benefit that are actively communicated to and used by the
+        scientific, conservation management and wider communities. All users of
+        OceanOmics Centre data and capabilities are expected to demonstrate
+        professional courtesy and scientific integrity, and to use the data in
+        ways that advance Minderoo&#x2019;s charitable purposes of protecting
+        and enhancing the natural environment, whilst promoting scientific
+        research and the provision of information education relating to the
+        natural environment.</p>
+      <p>Users of these data agree to do so in accordance with our Data Use
+        and Sharing Policy and are expected to cite this genome note and its
+        DOI. Users should further cite the source of the data and support by
+        including the following standard attribution statement in the
+        acknowledgement section of research outputs:
+        &#x201c;We acknowledge funding and support of Minderoo Foundation and
+        Minderoo OceanOmics Centre at UWA in this work and its mission to
+        protect and restore natural ecosystems for future
+        generations&#x201d;.</p>
+      <p>Notification of communications and research outputs that make use of
+        OceanOmics Centre data and capabilities are requested to be sent to
+        <email xlink:href="mailto:oceanomicscentre@uwa.edu.au">oceanomicscentre@uwa.edu.au</email>
+        to assist with our impact measurement and learning. We welcome
+        collaborators and data users to share impact stories that describe how
+        the data or support provided by OceanOmics Centre has elevated their
+        work.</p>
+    </sec>
+
+    <!-- ── References ── -->
+    <sec>
+      <title>References</title>
+      <ref-list>
+        <ref id="ref-allio2020">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Allio</surname><given-names>R</given-names></name>
+            </person-group>
+            <article-title>MitoFinder: Efficient automated large&#x2010;scale extraction of mitogenomic data in target enrichment phylogenomics</article-title>
+            <source>Molecular Ecology Resources</source>
+            <year iso-8601-date="2020">2020</year>
+            <volume>20</volume>
+            <fpage>892</fpage>
+            <lpage>905</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-brown2025">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Brown</surname><given-names>MR</given-names></name>
+              <name><surname>Gonzalez de La Rosa</surname><given-names>P</given-names></name>
+              <name><surname>Blaxter</surname><given-names>M</given-names></name>
+            </person-group>
+            <article-title>tidk: a toolkit to rapidly identify telomeric repeats from genomic datasets</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2025">2025</year>
+            <pub-id pub-id-type="doi">10.1093/bioinformatics/btaf049</pub-id>
+          </element-citation>
+        </ref>
+        <ref id="ref-cheng2021">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Cheng</surname><given-names>H</given-names></name>
+              <name><surname>Concepcion</surname><given-names>GT</given-names></name>
+              <name><surname>Feng</surname><given-names>X</given-names></name>
+            </person-group>
+            <article-title>Haplotype-resolved de novo assembly using phased assembly graphs with hifiasm</article-title>
+            <source>Nature Methods</source>
+            <year iso-8601-date="2021">2021</year>
+            <volume>18</volume>
+            <fpage>170</fpage>
+            <lpage>175</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-formenti2022">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Formenti</surname><given-names>G</given-names></name>
+            </person-group>
+            <article-title>Gfastats: Conversion, evaluation and manipulation of genome sequences using assembly graphs</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2022">2022</year>
+            <volume>38</volume>
+            <fpage>4214</fpage>
+            <lpage>4216</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-harry2022">
+          <element-citation publication-type="software">
+            <person-group person-group-type="author">
+              <name><surname>Harry</surname><given-names>E</given-names></name>
+            </person-group>
+            <article-title>PretextView (Paired REad TEXTure Viewer): A desktop application for viewing Pretext contact maps</article-title>
+            <year iso-8601-date="2022">2022</year>
+          </element-citation>
+        </ref>
+        <ref id="ref-howe2021">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Howe</surname><given-names>K</given-names></name>
+            </person-group>
+            <article-title>Significantly improving the quality of genome assemblies through curation</article-title>
+            <source>GigaScience</source>
+            <year iso-8601-date="2021">2021</year>
+            <volume>10</volume>
+            <issue>1</issue>
+          </element-citation>
+        </ref>
+        <ref id="ref-li2018">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Li</surname><given-names>H</given-names></name>
+            </person-group>
+            <article-title>Minimap2: pairwise alignment for nucleotide sequences</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2018">2018</year>
+            <volume>34</volume>
+            <fpage>3094</fpage>
+            <lpage>3100</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-manni2021">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Manni</surname><given-names>M</given-names></name>
+            </person-group>
+            <article-title>BUSCO update: Novel and streamlined workflows along with broader and deeper phylogenetic coverage for scoring of eukaryotic, prokaryotic, and viral genomes</article-title>
+            <source>Molecular Biology and Evolution</source>
+            <year iso-8601-date="2021">2021</year>
+            <volume>38</volume>
+            <fpage>4647</fpage>
+            <lpage>4654</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-quinlan2010">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Quinlan</surname><given-names>AR</given-names></name>
+              <name><surname>Hall</surname><given-names>IM</given-names></name>
+            </person-group>
+            <article-title>BEDTools: a flexible suite of utilities for comparing genomic features</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2010">2010</year>
+            <volume>26</volume>
+            <fpage>841</fpage>
+            <lpage>842</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-ranallo2020">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Ranallo-Benavidez</surname><given-names>TR</given-names></name>
+              <name><surname>Jaron</surname><given-names>KS</given-names></name>
+              <name><surname>Schatz</surname><given-names>MC</given-names></name>
+            </person-group>
+            <article-title>GenomeScope 2.0 and Smudgeplots for reference-free profiling of polyploid genomes</article-title>
+            <source>Nature Communications</source>
+            <year iso-8601-date="2020">2020</year>
+            <volume>11</volume>
+            <fpage>1432</fpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-rhie2020">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Rhie</surname><given-names>A</given-names></name>
+              <name><surname>Walenz</surname><given-names>BP</given-names></name>
+              <name><surname>Koren</surname><given-names>S</given-names></name>
+            </person-group>
+            <article-title>Merqury: Reference-free quality, completeness, and phasing assessment for genome assemblies</article-title>
+            <source>Genome Biology</source>
+            <year iso-8601-date="2020">2020</year>
+            <volume>21</volume>
+            <fpage>245</fpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-rhie2021">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Rhie</surname><given-names>A</given-names></name>
+            </person-group>
+            <article-title>Towards complete and error-free genome assemblies of all vertebrate species</article-title>
+            <source>Nature</source>
+            <year iso-8601-date="2021">2021</year>
+            <volume>592</volume>
+            <fpage>737</fpage>
+            <lpage>746</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-uliano2023">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Uliano-Silva</surname><given-names>M</given-names></name>
+            </person-group>
+            <article-title>MitoHiFi: A python pipeline for mitochondrial genome assembly from PacBio high-fidelity reads</article-title>
+            <source>BMC Bioinformatics</source>
+            <year iso-8601-date="2023">2023</year>
+            <volume>24</volume>
+            <fpage>288</fpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-andrews2010">
+          <element-citation publication-type="software">
+            <person-group person-group-type="author">
+              <name><surname>Andrews</surname><given-names>S</given-names></name>
+            </person-group>
+            <article-title>FastQC: A Quality Control Tool for High Throughput Sequence Data</article-title>
+            <year iso-8601-date="2010">2010</year>
+          </element-citation>
+        </ref>
+        <ref id="ref-bushnell2014">
+          <element-citation publication-type="report">
+            <person-group person-group-type="author">
+              <name><surname>Bushnell</surname><given-names>B</given-names></name>
+            </person-group>
+            <article-title>BBMap: A Fast, Accurate, Splice-Aware Aligner</article-title>
+            <publisher-name>Lawrence Berkeley National Laboratory</publisher-name>
+            <year iso-8601-date="2014">2014</year>
+          </element-citation>
+        </ref>
+        <ref id="ref-camacho2009">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Camacho</surname><given-names>C</given-names></name>
+              <name><surname>Coulouris</surname><given-names>G</given-names></name>
+              <name><surname>Avagyan</surname><given-names>V</given-names></name>
+            </person-group>
+            <article-title>BLAST+: architecture and applications</article-title>
+            <source>BMC Bioinformatics</source>
+            <year iso-8601-date="2009">2009</year>
+            <volume>10</volume>
+            <fpage>421</fpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-challis2020">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Challis</surname><given-names>R</given-names></name>
+              <name><surname>Richards</surname><given-names>E</given-names></name>
+              <name><surname>Rajan</surname><given-names>J</given-names></name>
+              <name><surname>Cochrane</surname><given-names>G</given-names></name>
+              <name><surname>Blaxter</surname><given-names>M</given-names></name>
+            </person-group>
+            <article-title>BlobToolKit &#x2013; interactive quality assessment of genome assemblies</article-title>
+            <source>G3: Genes, Genomes, Genetics</source>
+            <year iso-8601-date="2020">2020</year>
+            <volume>10</volume>
+            <fpage>1361</fpage>
+            <lpage>1374</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-ewels2016">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Ewels</surname><given-names>P</given-names></name>
+              <name><surname>Magnusson</surname><given-names>M</given-names></name>
+              <name><surname>Lundin</surname><given-names>S</given-names></name>
+              <name><surname>K&#x00e4;ller</surname><given-names>M</given-names></name>
+            </person-group>
+            <article-title>MultiQC: Summarize analysis results for multiple tools and samples in a single report</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2016">2016</year>
+            <volume>32</volume>
+            <fpage>3047</fpage>
+            <lpage>3048</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-ewels2020">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Ewels</surname><given-names>PA</given-names></name>
+              <name><surname>Peltzer</surname><given-names>A</given-names></name>
+              <name><surname>Fillinger</surname><given-names>S</given-names></name>
+            </person-group>
+            <article-title>The nf-core framework for community-curated bioinformatics pipelines</article-title>
+            <source>Nature Biotechnology</source>
+            <year iso-8601-date="2020">2020</year>
+            <volume>38</volume>
+            <fpage>276</fpage>
+            <lpage>278</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-karlicki2022">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Karlicki</surname><given-names>M</given-names></name>
+              <name><surname>Antonowicz</surname><given-names>S</given-names></name>
+              <name><surname>Karnkowska</surname><given-names>A</given-names></name>
+            </person-group>
+            <article-title>Tiara: deep learning-based classification system for eukaryotic sequences</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2022">2022</year>
+            <volume>38</volume>
+            <fpage>344</fpage>
+            <lpage>350</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-kurtzer2017">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Kurtzer</surname><given-names>GM</given-names></name>
+              <name><surname>Sochat</surname><given-names>V</given-names></name>
+              <name><surname>Bauer</surname><given-names>MW</given-names></name>
+            </person-group>
+            <article-title>Singularity: Scientific containers for mobility of compute</article-title>
+            <source>PLOS ONE</source>
+            <year iso-8601-date="2017">2017</year>
+            <volume>12</volume>
+            <issue>5</issue>
+            <elocation-id>e0177459</elocation-id>
+          </element-citation>
+        </ref>
+        <ref id="ref-li2009bwa">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Li</surname><given-names>H</given-names></name>
+              <name><surname>Durbin</surname><given-names>R</given-names></name>
+            </person-group>
+            <article-title>Fast and accurate short read alignment with Burrows-Wheeler transform</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2009">2009</year>
+            <volume>25</volume>
+            <fpage>1754</fpage>
+            <lpage>1760</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-li2009sam">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Li</surname><given-names>H</given-names></name>
+              <name><surname>Handsaker</surname><given-names>B</given-names></name>
+              <name><surname>Wysoker</surname><given-names>A</given-names></name>
+            </person-group>
+            <article-title>The Sequence Alignment/Map format and SAMtools</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2009">2009</year>
+            <volume>25</volume>
+            <fpage>2078</fpage>
+            <lpage>2079</lpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-open2c2024">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <collab>Open2C</collab>
+              <name><surname>Abdennur</surname><given-names>N</given-names></name>
+              <name><surname>Fudenberg</surname><given-names>G</given-names></name>
+            </person-group>
+            <article-title>Pairtools: from sequencing data to chromosome contacts</article-title>
+            <source>bioRxiv</source>
+            <year iso-8601-date="2024">2024</year>
+            <pub-id pub-id-type="doi">10.1101/2023.02.13.528389</pub-id>
+          </element-citation>
+        </ref>
+        <ref id="ref-sim2022">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Sim</surname><given-names>SB</given-names></name>
+              <name><surname>Corpuz</surname><given-names>RL</given-names></name>
+              <name><surname>Simmonds</surname><given-names>TJ</given-names></name>
+            </person-group>
+            <article-title>HiFiAdapterFilt, a memory efficient read processing pipeline, prevents occurrence of adapter sequence in PacBio HiFi reads</article-title>
+            <source>BMC Genomics</source>
+            <year iso-8601-date="2022">2022</year>
+            <volume>23</volume>
+            <fpage>157</fpage>
+          </element-citation>
+        </ref>
+        <ref id="ref-zhou2023">
+          <element-citation publication-type="journal">
+            <person-group person-group-type="author">
+              <name><surname>Zhou</surname><given-names>C</given-names></name>
+              <name><surname>McCarthy</surname><given-names>SA</given-names></name>
+              <name><surname>Durbin</surname><given-names>R</given-names></name>
+            </person-group>
+            <article-title>YaHS: Yet another Hi-C scaffolding tool</article-title>
+            <source>Bioinformatics</source>
+            <year iso-8601-date="2023">2023</year>
+            <volume>39</volume>
+            <issue>1</issue>
+          </element-citation>
+        </ref>
+      {{ additional_refs_xml }}
+      </ref-list>
+    </sec>
+
+  </body>
+
+  <!-- ============================================================
+       BACK MATTER
+       ============================================================ -->
+  <back>
+    {% if oceanomics_division %}
+    <sec>
+      <title>Author information</title>
+      <p>The following groups contributed to this project.</p>
+      <p><bold>OceanOmics Division</bold>: {% for m in oceanomics_division %}{{ m.given_names }} {{ m.surname }}{% if not loop.last %}, {% endif %}{% endfor %}</p>
+    </sec>
+    {% endif %}
+
+    <sec sec-type="data-availability">
+      <title>Data availability</title>
+      <p>NCBI: <italic>{{ species_name }}</italic> ({{ common_name }}).
+        BioProject accession
+        <ext-link ext-link-type="uri"
+                  xlink:href="https://www.ncbi.nlm.nih.gov/bioproject/{{ hap1_bioproject }}">{{ hap1_bioproject }}</ext-link>
+        (haplotype 1) and
+        <ext-link ext-link-type="uri"
+                  xlink:href="https://www.ncbi.nlm.nih.gov/bioproject/{{ hap2_bioproject }}">{{ hap2_bioproject }}</ext-link>
+        (haplotype 2).</p>
+      <p>The genome sequence is released openly for reuse. The
+        <italic>{{ species_name }}</italic> genome sequencing initiative is
+        part of the OceanGenomes project (Minderoo OceanOmics). All raw
+        sequence data and the assembly have been deposited in INSDC databases.
+        Raw data and assembly accession identifiers are reported in
+        <xref ref-type="table" rid="T1">Table 1</xref>.</p>
+    </sec>
+
+  </back>
+
+</article>
